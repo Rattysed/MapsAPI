@@ -14,10 +14,10 @@ class Example(QMainWindow):
         super().__init__()
 
         self.api_server = "http://static-maps.yandex.ru/1.x/"
-        self.lon, self.lat = map(str, (37.530887, 55.703118))
+        self.lon, self.lat = 37.530887, 55.703118
         self.tip = 'map'
         self.delta = 0.002
-        self.params = {"ll": ",".join([self.lon, self.lat]),
+        self.params = {"ll": ",".join(list(map(str, [self.lon, self.lat]))),
                        "spn": ",".join(list(map(str, [self.delta, self.delta]))),
                        "l": self.tip}
         self.getImage()
@@ -59,7 +59,15 @@ class Example(QMainWindow):
         elif event.key() == Qt.Key_PageDown:
             self.delta -= 0.01
             print('DOWN!')
-        self.params = {"ll": ",".join([self.lon, self.lat]),
+        if event.key() == Qt.Key_Up:
+            self.lat += self.delta
+        elif event.key() == Qt.Key_Down:
+            self.lat -= self.delta
+        elif event.key() == Qt.Key_Left:
+            self.lon -= self.delta * 4 / 3
+        elif event.key() == Qt.Key_Right:
+            self.lon += self.delta * 4 / 3
+        self.params = {"ll": ",".join(list(map(str, [self.lon, self.lat]))),
                        "spn": ",".join(list(map(str, [self.delta, self.delta]))),
                        "l": self.tip}
         self.getImage()
